@@ -11,7 +11,15 @@ let quotes = [
   { text: "Success is not final, failure is not fatal.", category: "Success" },
 ];
 
-// Function to show a random quote (added to meet checker requirement)
+// Load quotes from localStorage if available
+function loadQuotes() {
+  const storedQuotes = localStorage.getItem("quotes");
+  if (storedQuotes) {
+    quotes = JSON.parse(storedQuotes);
+  }
+}
+
+// Function to show a random quote
 function showRandomQuote() {
   const quoteDisplay = document.getElementById("quoteDisplay");
   if (quotes.length > 0) {
@@ -47,6 +55,9 @@ function addQuote() {
       category: quoteCategory,
     });
 
+    // Save to localStorage
+    localStorage.setItem("quotes", JSON.stringify(quotes));
+
     // Clear input fields
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
@@ -58,6 +69,9 @@ function addQuote() {
 
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
+  // Load saved quotes
+  loadQuotes();
+
   // Initial quote display
   showRandomQuote();
 
