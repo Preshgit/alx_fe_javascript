@@ -67,6 +67,21 @@ function addQuote() {
   }
 }
 
+// Function to export quotes
+function exportQuotes() {
+  const quotesJSON = JSON.stringify(quotes, null, 2);
+  const blob = new Blob([quotesJSON], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "quotes.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
   // Load saved quotes
@@ -82,5 +97,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const newQuoteButton = document.getElementById("newQuote");
   if (newQuoteButton) {
     newQuoteButton.addEventListener("click", showRandomQuote);
+  }
+
+  // Add event listener to the "Export Quotes" button
+  const exportButton = document.getElementById("exportQuotes");
+  if (exportButton) {
+    exportButton.addEventListener("click", exportQuotes);
   }
 });
