@@ -67,6 +67,26 @@ function addQuote() {
   }
 }
 
+// Function to handle file import
+function handleFileImport(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        const importedQuotes = JSON.parse(e.target.result);
+        quotes = importedQuotes;
+        localStorage.setItem("quotes", JSON.stringify(quotes));
+        showRandomQuote();
+        alert("Quotes imported successfully!");
+      } catch (error) {
+        alert("Error importing quotes. Please check the file format.");
+      }
+    };
+    reader.readAsText(file);
+  }
+}
+
 // Function to export quotes
 function exportQuotes() {
   const quotesJSON = JSON.stringify(quotes, null, 2);
@@ -93,15 +113,19 @@ document.addEventListener("DOMContentLoaded", function () {
   // Create the form
   createAddQuoteForm();
 
-  // Add event listener to the "Show New Quote" button
+  // Add event listeners
   const newQuoteButton = document.getElementById("newQuote");
   if (newQuoteButton) {
     newQuoteButton.addEventListener("click", showRandomQuote);
   }
 
-  // Add event listener to the "Export Quotes" button
   const exportButton = document.getElementById("exportQuotes");
   if (exportButton) {
     exportButton.addEventListener("click", exportQuotes);
+  }
+
+  const fileInput = document.getElementById("fileInput");
+  if (fileInput) {
+    fileInput.addEventListener("change", handleFileImport);
   }
 });
