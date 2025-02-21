@@ -103,7 +103,8 @@ async function syncQuotes() {
     populateCategories();
     filterQuotes();
 
-    updateSyncStatus("Quotes synced with server successfully!"); // Changed this line
+    updateSyncStatus("Quotes synced with server successfully!");
+    alert("Quotes synced with server!");
   }
 }
 
