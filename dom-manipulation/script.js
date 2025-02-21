@@ -69,12 +69,18 @@ function mergeQuotes(localQuotes, serverQuotes) {
 
   const mergedQuotes = [...localQuotes];
   const localIds = new Set(localQuotes.map((quote) => quote.id));
+  let conflictsFound = false;
 
   serverQuotes.forEach((serverQuote) => {
     if (!localIds.has(serverQuote.id)) {
       mergedQuotes.push(serverQuote);
+      conflictsFound = true;
     }
   });
+
+  if (conflictsFound) {
+    updateSyncStatus("New quotes found and merged from server");
+  }
 
   return mergedQuotes;
 }
@@ -97,7 +103,7 @@ async function syncQuotes() {
     populateCategories();
     filterQuotes();
 
-    updateSyncStatus("Sync completed successfully");
+    updateSyncStatus("Quotes synced with server successfully!"); // Changed this line
   }
 }
 
@@ -179,7 +185,12 @@ async function addQuote() {
     // Try to sync with server
     const synced = await sendQuotesToServer([newQuote]);
     if (synced) {
-      updateSyncStatus("New quote synced with server");
+      updateSyncStatus("New quote added and synced with server!"); // Changed this line
+    } else {
+      updateSyncStatus(
+        "Quote added locally but failed to sync with server",
+        true
+      ); // Added error notification
     }
 
     // Update UI
@@ -189,6 +200,8 @@ async function addQuote() {
     // Clear input fields
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
+  } else {
+    updateSyncStatus("Please fill in both quote text and category", true); // Added validation notification
   }
 }
 
