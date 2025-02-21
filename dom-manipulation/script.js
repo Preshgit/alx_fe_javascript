@@ -53,7 +53,7 @@ async function sendQuotesToServer(quotes) {
       method: "POST",
       body: JSON.stringify(quotes),
       headers: {
-        "Content-type": "application/json",
+        "Content-Type": "application/json",
       },
     });
     return response.ok;
